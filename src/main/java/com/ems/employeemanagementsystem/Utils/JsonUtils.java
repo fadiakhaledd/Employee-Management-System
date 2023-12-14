@@ -4,7 +4,9 @@ import com.ems.employeemanagementsystem.models.Employee;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,48 +21,40 @@ public class JsonUtils {
     ParsingUtils parsingUtils = new ParsingUtils();
 
     public List<Employee> readEmployeesFromJsonFile() throws IOException {
+        String jsonString = new String(Files.readAllBytes(path));
+        JSONArray jsonArray = new JSONArray(jsonString);
+        return convertJsonArrayToEmployee(jsonArray);
+    }
+
+    public List<Employee> convertJsonArrayToEmployee(JSONArray jsonArray) {
         List<Employee> employees = new ArrayList<>();
-
-        try {
-            String jsonString = new String(Files.readAllBytes(path));
-            JSONArray employeesJsonArray = new JSONArray(jsonString);
-
-            for (int i = 0; i < employeesJsonArray.length(); i++) {
-                JSONObject employeeJsonObject = employeesJsonArray.getJSONObject(i);
-                Employee employee = parsingUtils.parseJsonObjectToEmployee(employeeJsonObject);
-                employees.add(employee);
-            }
-
-        } catch (IOException exception) {
-            throw new IOException(exception);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject employeeJsonObject = jsonArray.getJSONObject(i);
+            Employee employee = parsingUtils.parseJsonObjectToEmployee(employeeJsonObject);
+            employees.add(employee);
         }
         return employees;
     }
 
-    public void addEmployeeToJsonFile(Employee employee) throws IOException {
-        BufferedReader reader = null;
+    public void writeEmployeesToJsonFile(List<Employee> employeeList) throws IOException {
+        JSONArray jsonArray = convertEmployeesListToJsonArray(employeeList);
         BufferedWriter writer = null;
         try {
-            reader = new BufferedReader(new FileReader(JSON_FILE));
-
-            StringBuilder jsonString = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonString.append(line);
-            }
-
-            JSONArray jsonArray = new JSONArray(jsonString.toString());
-
-            jsonArray.put(parsingUtils.parseEmployeeToJsonObject(employee));
-
             writer = new BufferedWriter(new FileWriter(JSON_FILE));
             writer.write(jsonArray.toString(2));
 
         } catch (IOException exception) {
             throw new IOException(exception);
         } finally {
-            if (reader != null) reader.close();
             if (writer != null) writer.close();
         }
+    }
+
+    public JSONArray convertEmployeesListToJsonArray(List<Employee> employeeList) {
+        JSONArray jsonArray = new JSONArray();
+        for (Employee employee : employeeList) {
+            jsonArray.put(parsingUtils.parseEmployeeToJsonObject(employee));
+        }
+        return jsonArray;
     }
 }

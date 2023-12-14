@@ -10,19 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParsingUtils {
-    public Employee parseJsonObjectToEmployee(JSONObject jsonEmployee) {
-        String firstName = jsonEmployee.getString("FirstName");
-        String lastName = jsonEmployee.getString("LastName");
-        int employeeId = jsonEmployee.getInt("EmployeeID");
-
-        String designationStr = jsonEmployee.getString("Designation");
-        Designation designation = parseDesignation(designationStr);
-
-        JSONArray knownLanguagesJsonArray = jsonEmployee.getJSONArray("KnownLanguages");
-        List<KnownLanguage> knownLanguages = parseKnownLanguagesList(knownLanguagesJsonArray);
-
-        return new Employee(firstName, lastName, employeeId, designation, knownLanguages);
-    }
 
     public JSONObject parseEmployeeToJsonObject(Employee employee) {
         JSONObject jsonObject = new JSONObject();
@@ -43,6 +30,19 @@ public class ParsingUtils {
         return jsonObject;
     }
 
+    public Employee parseJsonObjectToEmployee(JSONObject jsonEmployee) {
+        String firstName = jsonEmployee.getString("FirstName");
+        String lastName = jsonEmployee.getString("LastName");
+        int employeeId = jsonEmployee.getInt("EmployeeID");
+
+        String designationStr = jsonEmployee.getString("Designation");
+        Designation designation = parseDesignation(designationStr);
+
+        JSONArray knownLanguagesJsonArray = jsonEmployee.getJSONArray("KnownLanguages");
+        List<KnownLanguage> knownLanguages = parseKnownLanguagesList(knownLanguagesJsonArray);
+
+        return new Employee(employeeId, firstName, lastName, designation, knownLanguages);
+    }
 
     private Designation parseDesignation(String designationStr) {
         switch (designationStr.toUpperCase()) {

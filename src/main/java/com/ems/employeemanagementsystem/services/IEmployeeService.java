@@ -2,20 +2,21 @@ package com.ems.employeemanagementsystem.services;
 
 import com.ems.employeemanagementsystem.Utils.JsonUtils;
 import com.ems.employeemanagementsystem.models.Employee;
+import com.ems.employeemanagementsystem.repositories.EmployeesRepository;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface IEmployeeService {
-    JsonUtils jsonUtils = new JsonUtils();
+    EmployeesRepository employeesRepository = new EmployeesRepository();
+    List<Employee> getAllEmployees(Map<String, String> filters) throws IOException;
 
-    public List<Employee> getAllEmployees() throws IOException;
+    void addEmployee(Employee employee) throws IOException;
 
-    public void addEmployee(Employee employee) throws IOException;
+    Employee getEmployee(int employeeId) throws IOException;
 
-    public Employee getEmployee();
+    void deleteEmployee(int employeeId) throws IOException;
 
-    public void deleteEmployee(int employeeId);
-
-    public void updateEmployee(int employeeId);
+    Employee updateEmployee(int id, Employee employeeData) throws IOException;
 }
