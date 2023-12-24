@@ -46,7 +46,7 @@ public class EmployeeController {
             employeeService.deleteEmployee(id);
 
             Map<String, String> message = Map.of("Message", "Employee Deleted Successfully");
-            return new ResponseEntity<>(message, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(message, HttpStatus.OK);
 
         } catch (Exception e) {
             Map<String, String> errorMap = Map.of("error", e.getMessage());
@@ -63,6 +63,15 @@ public class EmployeeController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/by-languages")
+    public ResponseEntity<Object> getEmployeesByKnownLanguages(
+            @RequestParam("lang") String language,
+            @RequestParam(value = "minScore", required = false) Integer minScore,
+            @RequestParam(value = "maxScore", required = false) Integer maxScore) {
+
+        return new ResponseEntity<>(employeeService.getEmployeesByKnownLanguages(language, minScore, maxScore), HttpStatus.OK);
     }
 
 }

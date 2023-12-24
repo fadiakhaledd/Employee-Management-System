@@ -19,4 +19,6 @@ public interface IEmployeeService {
     void deleteEmployee(int employeeId) throws IOException;
 
     Employee updateEmployee(int id, Employee employeeData) throws IOException;
+
+    public List<Employee> getEmployeesByKnownLanguages(String language, Integer minScore, Integer maxScore);
 }

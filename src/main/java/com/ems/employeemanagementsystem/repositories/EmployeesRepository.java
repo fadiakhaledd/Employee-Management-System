@@ -34,12 +34,7 @@ public class EmployeesRepository {
     }
 
     public void addEmployee(Employee employee) throws IOException {
-        Employee existingEmployee = employeesMap.get(employee.getEmployeeId());
-        if (existingEmployee != null) {
-            throw new IllegalArgumentException("Employee with ID: " + employee.getEmployeeId() + " already exists");
-        } else {
-            employeesMap.put(employee.getEmployeeId(), employee);
-        }
+        employeesMap.put(employee.getEmployeeId(), employee);
         jsonUtils.writeEmployeesToJsonFile(getEmployees());
     }
 
