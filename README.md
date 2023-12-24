@@ -6,7 +6,6 @@ Employee management system with features for adding, deleting, and searching emp
 
 - Create, view, update, and delete employees.
 - Apply filters for searching by any attribute.
-- Web-based user interface
 - JSON-based data storage.
 
 ## Getting Started
